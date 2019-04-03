@@ -5,6 +5,6 @@ import { createUploadLink } from 'apollo-upload-client'
 const client = new ApolloClient({
   ssrMode: true,
   cache: new InMemoryCache(),
-  link: createUploadLink({ uri: process.env.API_URI })
+  link: createUploadLink({ uri: process.env.REACT_APP_API_URI })
 })
 export default client;
