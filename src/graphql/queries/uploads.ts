@@ -1,20 +1,19 @@
 import gql from 'graphql-tag'
 
-export const UPLOADS = gql`
-  query uploads {
+export const GET_IMAGES = gql`
+  query GetImages {
     uploads {
-      id
-      filename
-      mimetype
-      path
+      imagePath
+      altText
+      svg
     }
   }
 `
 
 export const UPLOAD_FILE = gql`
-  mutation uploadFile($file: Upload!) {
+  mutation UploadFile($file: Upload!) {
     uploadFile(file: $file) {
-      filename
+      imagePath
     }
   }
 `;
