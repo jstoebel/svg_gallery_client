@@ -4,6 +4,8 @@ import { useQuery } from 'react-apollo-hooks';
 import Image from './Image'
 import { GET_IMAGES } from '../../graphql/queries/uploads'
 import { GetImages, GetImages_uploads } from '../../graphql/types/GetImages'
+import * as css from './styles'
+
 
 const Images = () => {
   const { data, error, loading } = useQuery<GetImages>(GET_IMAGES);
@@ -16,11 +18,11 @@ const Images = () => {
   };
 
   return (
-    <ul>
-      {data!.uploads.map((image: GetImages_uploads) => (
-        <Image image={image} />
+    <css.imageList>
+      {data!.uploads.map((image: GetImages_uploads, key) => (
+        <Image image={image} key={key} />
       ))}
-    </ul>
+    </css.imageList>
   );
 }
 
