@@ -60,6 +60,8 @@ const UploadForm: React.SFC<UploadFormI> = ({closeDrawer}) => {
     // Update the gallery with new image? I think a new query is needed for that since we need data generated on the server (such as the svg). Maybe images should use sub/pub
   }
 
+
+  // TODO, can we also accept user inputed altText?
   return (
     <Mutation<UploadFile, UploadFileVariables>
       mutation={UPLOAD_FILE}
