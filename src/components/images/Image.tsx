@@ -13,24 +13,22 @@ export default ({image}: Props) => {
   const [showImg, setShowImg] = useState(true)
   const svg = image.svg || ''
 
-  const handleImageLoaded = () => {
-    console.log('image loaded!');
+  const handleImageLoad = () => {
     setShowSvg(false)
   }
   
   const handleImageError = () => {
     console.log('error loading image!');
-    // setShowImg(false)
+    setShowImg(false)
   }
-  console.log(process.env);
-  
-  const fullImagePath = `${process.env.REACT_APP_API_ROOT}/${image.imagePath}`
+
+  const fullImagePath = `${process.env.REACT_APP_MEDIA_ROOT}/${image.imagePath}`
   return (
     <div>
       {showSvg && <css.img src={svg}/> }
       {showImg && <css.img 
         src={fullImagePath}
-        onLoad={handleImageLoaded}
+        onLoad={handleImageLoad}
         onError={handleImageError}
       />}
     </div>
