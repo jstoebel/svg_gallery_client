@@ -82,7 +82,7 @@ const UploadForm: React.SFC<UploadFormI> = ({closeDrawer}) => {
           {upload.data && <css.previewImage src={upload.data} alt=""/>}
           { upload.file && <Button
           variant='contained'
-          color='default' 
+          color='primary' 
           onClick={(e) => {handleFormSubmit(e, uploadFile)}}
           >
             Upload
