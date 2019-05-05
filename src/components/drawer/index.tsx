@@ -7,20 +7,18 @@ import UploadForm from './upload'
 export default () => {
   const [open, setOpen] = useState(false)
 
-  const handleDrawerToggle = () => {
-    setOpen(!open)
-  }
+  const toggleDrawer = (open: boolean) => () => setOpen(open)
 
   return (
     <div>
-      <Button onClick={handleDrawerToggle}>Upload</Button>
+      <Button onClick={toggleDrawer(true)}>Upload a photo</Button>
       <Drawer
         anchor="right"
         open={open}
-        onClose={handleDrawerToggle}
+        onClose={toggleDrawer(false)}
       >
         <css.drawerContents>
-          <UploadForm />
+          <UploadForm closeDrawer={toggleDrawer(false)} />
         </css.drawerContents>
       </Drawer>
     </div>

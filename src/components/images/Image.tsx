@@ -7,7 +7,6 @@ interface Props {
 }
 
 export default ({image}: Props) => {
-  console.log('rendering an image', image);
   
   const [showSvg, setShowSvg] = useState(true)
   const [showImg, setShowImg] = useState(true)
