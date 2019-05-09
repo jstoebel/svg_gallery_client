@@ -11,8 +11,8 @@ export const GET_IMAGES = gql`
 `
 
 export const UPLOAD_FILE = gql`
-  mutation UploadFile($file: Upload!) {
-    uploadFile(file: $file) {
+  mutation UploadFile($file: Upload!, $altText: String!) {
+    uploadFile(file: $file, altText: $altText) {
       imagePath
     }
   }

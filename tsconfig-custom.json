@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "downlevelIteration": true,
-    "isolatedModules": false
+    "isolatedModules": false,
+    "typeRoots" : ["./typings"],
   }
 }
