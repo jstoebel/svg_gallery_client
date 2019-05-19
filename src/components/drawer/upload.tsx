@@ -1,5 +1,5 @@
 import React, {useState, FormEvent} from 'react'
-import { Mutation } from 'react-apollo'
+import { Mutation, FetchResult } from 'react-apollo'
 import { UPLOAD_FILE } from '../../graphql/queries/uploads'
 import { UploadFile, UploadFileVariables } from '../../graphql/types/UploadFile'
 import Button from '@material-ui/core/Button';
@@ -7,6 +7,9 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import * as css from './styles'
 import TextField from './textField'
 import Formsy from 'formsy-react';
+import {DataProxy} from 'apollo-cache'
+import {GET_IMAGES} from '../../graphql/queries/uploads'
+import {GetImages, GetImages_uploads} from '../../graphql/types/GetImages'
 
 interface UploadFormI {
   closeDrawer: () => void
@@ -33,6 +36,8 @@ const UploadForm: React.SFC<UploadFormI> = ({closeDrawer}) => {
     title: '',
     altText: ''
   })
+
+  const [validInputs, setValidInputs] = useState(false)
 
   const handleImageChange = (files: FileList | null) => {
     const [file] = files
@@ -65,13 +70,17 @@ const UploadForm: React.SFC<UploadFormI> = ({closeDrawer}) => {
   }
 
   const handleFormSubmit = (uploadFile: Function, data: TextFieldsI) => {
-    console.log('hello from upload button');
+    console.log('hello from upload button', data);
+    const {altText, title} = data;
     uploadFile({ 
       variables: { 
-        file: upload.file
+        file: upload.file,
+        altText,
+        title,
       } 
     })
-    closeDrawer()
+    console.log('done with handleFormSubmit');
+    
   }
 
   const handleFormChange = (e: FormEvent<HTMLInputElement>) => {
@@ -80,30 +89,45 @@ const UploadForm: React.SFC<UploadFormI> = ({closeDrawer}) => {
     setTextFields(newState);
   }
   const handleUploadDone = () => {
-    // close the drawer
-    // Update the gallery with new image? I think a new query is needed for that since we need data generated on the server (such as the svg). Maybe images should use sub/pub
+    closeDrawer()
   }
 
+  function updateCache(cache: DataProxy, result: FetchResult<{uploadFile: GetImages_uploads}>): void {
+    console.log('hello from updateCache');
+    console.log(cache);
+    console.log(result);
+    
+    const data = result.data!
+    const currentUploadData = cache.readQuery<GetImages>({ query: GET_IMAGES})
+    const uploads = (currentUploadData && currentUploadData!.uploads) || []
+    cache.writeQuery({
+      query: GET_IMAGES,
+      data: { uploads: uploads.concat([data.uploadFile]) }
+    })
 
-  // TODO, can we also accept user inputed altText?
+    console.log('cache updated!');
+    
+  }
+
+  const changeValidInputs = (validInputs: boolean) => () => setValidInputs(validInputs)
+  const formValid = validInputs && Boolean(upload.data)
+
   return (
     <Mutation<UploadFile, UploadFileVariables>
       mutation={UPLOAD_FILE}
       onCompleted={handleUploadDone}
+      update={updateCache}
     >
       {uploadFile => (
-        <Formsy<TextFieldsI> onValidSubmit={(data) => handleFormSubmit(uploadFile, data) } >
+        <Formsy<TextFieldsI> onValidSubmit={(data) => handleFormSubmit(uploadFile, data) } onValid={changeValidInputs(true)} onInvalid={changeValidInputs(false)}>
           <TextField
             label="Title"
             name="title"
-            validations="isDefaultRequiredValue"
-            validationError={["This field is required"]}
             required
           />
           <TextField
             label="Alt Text"
             name="altText"
-            validationError={["This field is required"]}
             required
           />
           <css.fileInput
@@ -113,21 +137,22 @@ const UploadForm: React.SFC<UploadFormI> = ({closeDrawer}) => {
             required
             onChange={ (e) => handleImageChange(e.target.files) }
           />
-          <label htmlFor="fileUpload">
+          <css.uploadButton>
             <Button variant="contained" component="span">
               Select a file
             </Button>
-          </label>
-          {upload.data && <css.previewImage src={upload.data} alt=""/>}
-          { upload.file && <Button
+          </css.uploadButton>
+          
+          <Button
             variant='contained'
             color='primary'
             type='submit'
+            disabled={!formValid}
           >
             Upload
             <CloudUploadIcon />
           </Button>
-          }
+          {upload.data && <css.previewImage src={upload.data} alt="" /> || <css.previewImageSlot />}
         </Formsy>
       )}
     </Mutation>

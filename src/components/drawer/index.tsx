@@ -13,7 +13,7 @@ export default () => {
     <div>
       <Button variant='contained' color='primary' onClick={toggleDrawer(true)}>Upload a photo</Button>
       <Drawer
-        anchor="right"
+        anchor="left"
         open={open}
         onClose={toggleDrawer(false)}
       >

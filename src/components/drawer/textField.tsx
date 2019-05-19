@@ -27,7 +27,6 @@ class Field extends React.Component<Props, {}> {
     // An error message is returned only if the component is invalid
     const {getErrorMessage, getValue} = this.props;
     const errorMessage = getErrorMessage()
-    console.log('RENDER: error message is', errorMessage);
     
     return (
       <div>

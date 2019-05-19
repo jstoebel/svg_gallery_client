@@ -11,9 +11,11 @@ export const GET_IMAGES = gql`
 `
 
 export const UPLOAD_FILE = gql`
-  mutation UploadFile($file: Upload!, $altText: String!) {
-    uploadFile(file: $file, altText: $altText) {
+  mutation UploadFile($file: Upload!, $altText: String!, $title: String!) {
+    uploadFile(file: $file, altText: $altText, title: $title) {
       imagePath
+      altText
+      svg
     }
   }
 `;

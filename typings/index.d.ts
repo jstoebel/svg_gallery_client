@@ -25,6 +25,8 @@ declare module 'formsy-react' {
     onValidSubmit?: (data: TData, resetForm: boolean, invalidateForm: (propertyErrors: { [key: string]: string }) => void) => void;
     validationErrors?: { [key: string]: string };
     className?: string;
+    onValid: () => void;
+    onInvalid: () => void;
   }
 
   export default class Formsy<T> extends React.Component<FormsyProps<T>> {

@@ -9,6 +9,8 @@
 export interface UploadFile_uploadFile {
   __typename: "File";
   imagePath: string;
+  altText: string;
+  svg: string | null;
 }
 
 export interface UploadFile {
@@ -17,4 +19,6 @@ export interface UploadFile {
 
 export interface UploadFileVariables {
   file: any;
+  altText: string;
+  title: string;
 }
